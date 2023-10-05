@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.fab.uitk-runtime-dropdown": "file:/Users/federico/Documents/_FedericoDocumenti/_Università/3° Anno, A.A. 22-23/Tesi/fab.uitk-runtime-dropdown/Packages/com.fab.uitk-runtime-dropdown",
     "com.unity.ai.navigation": "1.1.4",
     "com.unity.collab-proxy": "2.0.5",
     "com.unity.feature.2d": "2.0.0",

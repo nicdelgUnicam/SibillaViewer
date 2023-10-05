@@ -12,8 +12,6 @@ public class AgentSpawner : MonoBehaviour
 {
     public GameObject agent;
     [SerializeField] private GameObject indexSelector;
-    [SerializeField] private GameObject instructionsText;
-    [SerializeField] private GameObject cancelButton;
 
     private string _file;
     private int[] _indices = {0, 1, 2};
@@ -23,7 +21,7 @@ public class AgentSpawner : MonoBehaviour
     public void AddAgent()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        StartCoroutine(LoadAgentFile(url, InstantiateAgent));
+        StartCoroutine(LoadAgentFile(_file, InstantiateAgent));
 #else
         InstantiateAgent(_file);
 #endif
@@ -68,9 +66,8 @@ public class AgentSpawner : MonoBehaviour
         movementController.sourceFile = agentFile;
         movementController.indices = _indices;
         
-        var changeSpriteScript = newAgent.GetComponent<ChangeSpriteScript>();
-        changeSpriteScript.instructionsText = instructionsText;
-        changeSpriteScript.cancelButton = cancelButton;
+        var spriteChanger = newAgent.GetComponent<SpriteChanger>();
+        spriteChanger.spriteChanged.AddListener(GetComponent<SpriteChangeController>().CancelAgentSpriteChange);
     }
     
 #if UNITY_WEBGL && !UNITY_EDITOR

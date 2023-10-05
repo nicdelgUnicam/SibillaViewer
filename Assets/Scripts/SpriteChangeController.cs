@@ -3,28 +3,29 @@ using UnityEngine;
 
 public class SpriteChangeController: MonoBehaviour
 {
+    public static bool isRunning = true;
+    /// <summary>
+    /// The path of the sprite file, or the blob url on WebGL
+    /// </summary>
+    public static string spriteFile = "";
+    
     [SerializeField] private GameObject instructionsText;
     [SerializeField] private GameObject cancelButton;
     
     
     public void StartAgentSpriteChange()
     {
-        Time.timeScale = 0f;
-        ChangeSpriteScript.isRunning = false;
-
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLFileBrowserHelper.RequestFile(url =>
-        {
-            if (string.IsNullOrWhiteSpace(url))
             {
-                CancelAgentSpriteChange();
-                return;
-            }
-            
-            ChangeSpriteScript.spriteFile = url;
-            instructionsText.SetActive(true);
-            cancelButton.SetActive(true);
-        }, ".png");
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    CancelAgentSpriteChange();
+                    return;
+                }
+                
+                OnFileChosen(url);
+            }, ".png");
 #else
         var filters = new ExtensionFilter[]
         {
@@ -37,18 +38,25 @@ public class SpriteChangeController: MonoBehaviour
             return;
         }
 
-        ChangeSpriteScript.spriteFile = paths[0];
-        instructionsText.SetActive(true);
-        cancelButton.SetActive(true);
+        OnFileChosen(paths[0]);
 #endif
     }
     
     public void CancelAgentSpriteChange()
     {
         Time.timeScale = 1f;
-        ChangeSpriteScript.isRunning = true;
-        ChangeSpriteScript.spriteFile = "";
+        isRunning = true;
+        spriteFile = "";
         instructionsText.SetActive(false);
         cancelButton.SetActive(false);
+    }
+
+    private void OnFileChosen(string file)
+    {
+        Time.timeScale = 0f;
+        isRunning = false;
+        spriteFile = file;
+        instructionsText.SetActive(true);
+        cancelButton.SetActive(true);
     }
 }

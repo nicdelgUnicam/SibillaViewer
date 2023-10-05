@@ -24,8 +24,13 @@ mergeInto(LibraryManager.library, {
                     return;
                 }
               
-                console.log('File url is ' + URL.createObjectURL(files[0]));
-                SendMessage(FileCallbackObjectName, FileCallbackMethodName, URL.createObjectURL(files[0]));
+                var url = URL.createObjectURL(files[0]);
+                console.log('File url is ' + url);
+                SendMessage(FileCallbackObjectName, FileCallbackMethodName, url);
+            };
+            
+            filebrowser.onclick = function (e) {
+                e.target.value = '';
             };
         }
 
@@ -40,7 +45,7 @@ mergeInto(LibraryManager.library, {
         // If for some reason the filebrowser does not exist, set it
         // This can happen in Blazor.NET projects
         if (filebrowser === null)
-            InitFileLoader(FileCallbackObjectName, FileCallbackMethodName);
+            this.InitFileBrowser(FileCallbackObjectName, FileCallbackMethodName);
                     
         // Set the received extensions
         if (str !== null || str.match(/^ *$/) === null)

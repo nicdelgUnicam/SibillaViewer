@@ -7,37 +7,24 @@ using System.IO;
 #endif
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class ChangeSpriteScript : MonoBehaviour, IPointerClickHandler
+public class SpriteChanger : MonoBehaviour, IPointerClickHandler
 {
-    public static bool isRunning = true;
-    /// <summary>
-    /// The path of the sprite file, or the blob url on WebGL
-    /// </summary>
-    public static string spriteFile = "";
-
-    public GameObject instructionsText;
-    public GameObject cancelButton;
+    public UnityEvent spriteChanged; // Calls SpriteChangeController.CancelAgentSpriteChange()
     
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isRunning || string.IsNullOrEmpty(spriteFile))
+        if (SpriteChangeController.isRunning || string.IsNullOrEmpty(SpriteChangeController.spriteFile))
             return;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        StartCoroutine(LoadSpriteFromUrl(spriteFile, SetSprite));
+        StartCoroutine(LoadSpriteFromUrl(SpriteChangeController.spriteFile, SetSprite));
 #else
-        SetSprite(LoadTexture(spriteFile));
+        SetSprite(LoadTexture(SpriteChangeController.spriteFile));
 #endif
-
-        spriteFile = "";
-        
-        Time.timeScale = 1f;
-        isRunning = true;
-        instructionsText.SetActive(false);
-        cancelButton.SetActive(false);
     }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -71,5 +58,7 @@ public class ChangeSpriteScript : MonoBehaviour, IPointerClickHandler
         var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         GetComponent<SpriteRenderer>().sprite = sprite;
         GetComponent<CircleCollider2D>().radius = (sprite.bounds.extents.x + sprite.bounds.extents.y) / 2.0f;
+
+        spriteChanged.Invoke();
     }
 }
