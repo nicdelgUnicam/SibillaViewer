@@ -100,7 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521b66092474542e7a52f37363052b40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: 
+  sourceFile: 
+  indices: 
 --- !u!114 &-1415561834258905656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca842795f5a2a426e8f787ab4f34a196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instructionsText: {fileID: 0}
+  cancelButton: {fileID: 0}
 --- !u!50 &4285521665910141468
 Rigidbody2D:
   serializedVersion: 4

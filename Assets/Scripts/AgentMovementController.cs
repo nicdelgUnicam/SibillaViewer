@@ -1,7 +1,7 @@
 using UnityEngine;
 using Utils;
 
-public class MoveScript : MonoBehaviour
+public class AgentMovementController : MonoBehaviour
 {
     /// <summary>
     /// The path of the source file, or the entire content on WebGL
@@ -9,7 +9,6 @@ public class MoveScript : MonoBehaviour
     public string sourceFile;
     public int[] indices;
 
-    private float _targetTime;
     private float _prevTime;
     private Vector3 _target;
 
@@ -23,7 +22,7 @@ public class MoveScript : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
 
         transform.position = _controller.GetNext().Position;
-        _prevTime = Time.time;
+        _prevTime = Time.fixedTime;
     }
 
     private void FixedUpdate()

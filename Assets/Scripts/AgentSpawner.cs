@@ -8,7 +8,7 @@ using SFB;
 
 using UnityEngine;
 
-public class SpawnScript : MonoBehaviour
+public class AgentSpawner : MonoBehaviour
 {
     public GameObject agent;
     [SerializeField] private GameObject indexSelector;
@@ -18,15 +18,6 @@ public class SpawnScript : MonoBehaviour
     private string _file;
     private int[] _indices = {0, 1, 2};
 
-
-    /*private void Start()
-    {
-        var files = Directory.GetFiles("Assets/Resources", "*.csv");
-        foreach (var file in files)
-        {
-            InstantiateAgent(file);
-        }
-    }*/
 
     #region UI Callbacks
     public void AddAgent()
@@ -63,66 +54,21 @@ public class SpawnScript : MonoBehaviour
         indexSelector.SetActive(true);
 #endif
     }
-    
-    public void StartAgentSpriteChange()
-    {
-        Time.timeScale = 0f;
-        ChangeSpriteScript.isRunning = false;
-
-#if UNITY_WEBGL && !UNITY_EDITOR
-        WebGLFileBrowserHelper.RequestFile(url =>
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                CancelAgentSpriteChange();
-                return;
-            }
-            
-            ChangeSpriteScript.spriteFile = url;
-            instructionsText.SetActive(true);
-            cancelButton.SetActive(true);
-        }, ".png");
-#else
-        var filters = new ExtensionFilter[]
-        {
-            new("Images", "png")
-        };
-        var paths = StandaloneFileBrowser.OpenFilePanel("Open a file", "", filters, false);
-        if (paths.Length != 1 || paths[0].Length == 0)
-        {
-            CancelAgentSpriteChange();
-            return;
-        }
-
-        ChangeSpriteScript.spriteFile = paths[0];
-        instructionsText.SetActive(true);
-        cancelButton.SetActive(true);
-#endif
-    }
 
     public void OnTimeDropdownChanged(int index) => _indices[0] = index;
     public void OnXDropdownChanged(int index) => _indices[1] = index;
     public void OnYDropdownChanged(int index) => _indices[2] = index;
     #endregion
-    
-    public void CancelAgentSpriteChange()
-    {
-        Time.timeScale = 1f;
-        ChangeSpriteScript.isRunning = true;
-        ChangeSpriteScript.spriteFile = "";
-        instructionsText.SetActive(false);
-        cancelButton.SetActive(false);
-    }
 
     private void InstantiateAgent(string agentFile)
     {
-        var newObject = Instantiate(agent);
+        var newAgent = Instantiate(agent);
         
-        var moveScript = newObject.GetComponent<MoveScript>();
-        moveScript.sourceFile = agentFile;
-        moveScript.indices = _indices;
+        var movementController = newAgent.GetComponent<AgentMovementController>();
+        movementController.sourceFile = agentFile;
+        movementController.indices = _indices;
         
-        var changeSpriteScript = newObject.GetComponent<ChangeSpriteScript>();
+        var changeSpriteScript = newAgent.GetComponent<ChangeSpriteScript>();
         changeSpriteScript.instructionsText = instructionsText;
         changeSpriteScript.cancelButton = cancelButton;
     }

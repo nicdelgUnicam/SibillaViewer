@@ -20,6 +20,9 @@ namespace Utils
         /// <exception cref="ArgumentException">If the given path or file is empty</exception>
         public CsvFileReader(string file)
         {
+            if (string.IsNullOrEmpty(file))
+                throw new ArgumentException("File or path is empty or null");
+            
 #if UNITY_WEBGL && !UNITY_EDITOR
             _reader = new StringReader(file);
 #else

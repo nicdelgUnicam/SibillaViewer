@@ -1,3 +1,4 @@
+#if UNITY_WEBGL && !UNITY_EDITOR
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -36,7 +37,7 @@ public static class WebGLFileBrowserHelper
         // ReSharper disable once ObjectCreationAsStatement
         new GameObject(objectName, typeof(WebGLFileBrowser));
         
-        // Initializing the JS part of the FileBrowser system
+        // Initialize the JS part of the FileBrowser system
         InitFileBrowser(objectName, methodName);
         Debug.Log("Initialized WebGL file browser");
     }
@@ -45,7 +46,6 @@ public static class WebGLFileBrowserHelper
     /// <summary>
     /// Starts the file browser
     /// </summary>
-    /// 
     /// <param name="callback">
     /// Will be called after the user selects a file, the Http path to the file is passed as a parameter
     /// </param>
@@ -84,3 +84,4 @@ public static class WebGLFileBrowserHelper
     [DllImport("__Internal")]
     private static extern void ResetFileBrowser();
 }
+#endif
