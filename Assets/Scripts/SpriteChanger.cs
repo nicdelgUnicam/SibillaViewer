@@ -23,7 +23,7 @@ public class SpriteChanger : MonoBehaviour, IPointerClickHandler
 #if UNITY_WEBGL && !UNITY_EDITOR
         StartCoroutine(LoadSpriteFromUrl(SpriteChangeController.spriteFile, SetSprite));
 #else
-        SetSprite(LoadTexture(SpriteChangeController.spriteFile));
+        SetSprite(LoadSpriteFromFile(SpriteChangeController.spriteFile));
 #endif
     }
 
@@ -42,10 +42,8 @@ public class SpriteChanger : MonoBehaviour, IPointerClickHandler
 
         finishCallback(DownloadHandlerTexture.GetContent(request));
     }
-#endif
-    
-#if !UNITY_WEBGL || UNITY_EDITOR
-    private static Texture2D LoadTexture(string filePath)
+#else
+    private static Texture2D LoadSpriteFromFile(string filePath)
     {
         var bytes = File.ReadAllBytes(filePath);
         Texture2D texture = new(2, 2);

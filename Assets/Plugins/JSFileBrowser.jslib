@@ -55,7 +55,7 @@ mergeInto(LibraryManager.library, {
         filebrowser.setAttribute('class', 'focused');
         filebrowser.click();
     },
-            
+
     ResetFileBrowser: function () {
         var filebrowser = document.getElementById('filebrowser');
 
